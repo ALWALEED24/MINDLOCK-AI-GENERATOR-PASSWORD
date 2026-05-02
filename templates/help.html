@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MindLock AI Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- 1. BACKGROUND --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+        /* --- 2. CHAT CARD --- */
+        .chat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 90%;
+            max-width: 500px;
+            height: 80vh;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- 3. HEADER --- */
+        .chat-header {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .chat-header h2 { margin: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .back-link { color: white; text-decoration: none; font-size: 0.9rem; opacity: 0.8; }
+        .back-link:hover { opacity: 1; text-decoration: underline; }
+
+        /* --- 4. MESSAGES --- */
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .chat-box::-webkit-scrollbar { width: 5px; }
+        .chat-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            animation: popIn 0.3s ease-out;
+            word-wrap: break-word;
+        }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .user-msg {
+            align-self: flex-end;
+            background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+            border-bottom-right-radius: 2px;
+        }
+
+        .ai-msg {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-bottom-left-radius: 2px;
+        }
+
+        .thinking {
+            animation: pulse 1.5s infinite;
+            font-style: italic;
+            opacity: 0.7;
+        }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+        /* --- 5. INPUT --- */
+        .input-area {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+        button {
+            background: #00e676;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #141E30;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+        button:hover { transform: scale(1.1); }
+
+    </style>
+</head>
+<body>
+
+    <div class="chat-card">
+        <div class="chat-header">
+            <a href="/" class="back-link">← Home</a>
+            <h2>🤖 MindLock Assistant</h2>
+            <div style="width: 50px;"></div>
+        </div>
+
+        <div class="chat-box" id="chatBox">
+            <div class="message ai-msg">
+                Hello! I am your security assistant. Ask me anything about passwords or account safety!
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Type a message..." onkeypress="handleEnter(event)">
+            <button id="sendBtn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // Disable input while thinking
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+
+            // 1. Show User Message
+            // We do NOT save the ID for this one, so we don't accidentally select it
+            addMessage(text, 'user-msg');
+            userInput.value = '';
+
+            // 2. Show "Thinking..." and capture its ID
+            const loadingId = addMessage("Thinking...", 'ai-msg thinking');
+
+            try {
+                // 3. Send to Python
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+                
+                const data = await response.json();
+                
+                // 4. FIND THE "THINKING" BUBBLE (using strict ID) AND REPLACE TEXT
+                const loadingBubble = document.getElementById(loadingId);
+                if (loadingBubble) {
+                    loadingBubble.innerText = data.response;
+                    loadingBubble.classList.remove('thinking');
+                }
+
+            } catch (error) {
+                const loadingBubble = document.getElementById(loadingId);
+                if (loadingBubble) {
+                    loadingBubble.innerText = "Connection error. Please try again.";
+                    loadingBubble.classList.remove('thinking');
+                }
+            } finally {
+                // Re-enable input
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+                userInput.focus();
+            }
+        }
+
+        // --- THE FIX IS HERE ---
+        function addMessage(text, className) {
+            const div = document.createElement('div');
+            div.className = `message ${className}`; 
+            div.innerText = text;
+            
+            // FIX: Add Math.random() to make sure ID is truly unique
+            // This prevents the code from confusing the user message with the AI message
+            const uniqueId = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            div.id = uniqueId;
+
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            return uniqueId;
+        }
+    </script>
+
+</body>
+</html>

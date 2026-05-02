@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - MindLock AI</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- 1. ANIMATED BACKGROUND --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+        /* --- 2. GLASS CARD --- */
+        .register-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: floatUp 0.8s ease-out;
+        }
+
+        @keyframes floatUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- 3. ICONS & TEXT --- */
+        .icon-circle {
+            width: 70px; height: 70px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            margin: 0 auto 20px auto; font-size: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        h1 { font-size: 2rem; margin-bottom: 5px; font-weight: 600; }
+        p { font-size: 0.9rem; opacity: 0.8; margin-bottom: 30px; }
+
+        /* --- 4. INPUTS --- */
+        .input-group { position: relative; margin-bottom: 20px; text-align: left; }
+        
+        .input-group i {
+            position: absolute; top: 50%; left: 15px; transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .input-group input {
+            width: 100%; padding: 15px 15px 15px 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px; color: white; font-size: 1rem; outline: none;
+            box-sizing: border-box; transition: 0.3s; font-family: 'Poppins', sans-serif;
+        }
+        .input-group input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #4ca1af;
+            box-shadow: 0 0 10px rgba(76, 161, 175, 0.5);
+        }
+
+        /* --- VALIDATION STYLES --- */
+        .input-error { border-color: #ff4d4d !important; box-shadow: 0 0 10px rgba(255, 77, 77, 0.4) !important; }
+        .input-success { border-color: #00e676 !important; box-shadow: 0 0 10px rgba(0, 230, 118, 0.4) !important; }
+
+        #password-requirements {
+            display: none;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: left;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        #password-requirements h4 { margin: 0 0 10px 0; font-size: 0.85rem; color: #4ca1af; text-transform: uppercase; letter-spacing: 1px; }
+        .req-item { font-size: 0.8rem; margin-bottom: 5px; color: #ff4d4d; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .req-item.valid { color: #00e676; }
+
+        /* --- 5. BUTTON --- */
+        .btn-register {
+            width: 100%; padding: 15px;
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            border: none; border-radius: 30px; color: white;
+            font-size: 1.1rem; font-weight: 600; cursor: pointer;
+            transition: 0.3s; margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+        }
+        .btn-register:hover { transform: scale(1.02); box-shadow: 0 8px 20px rgba(17, 153, 142, 0.6); }
+
+        /* --- 6. FOOTER --- */
+        .footer-link { margin-top: 25px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+        .footer-link a { color: white; font-weight: 600; text-decoration: none; }
+        .footer-link a:hover { text-decoration: underline; }
+
+    </style>
+</head>
+<body>
+
+    <div class="register-card">
+        
+        <div class="icon-circle">
+            <i class="fas fa-user-plus"></i>
+        </div>
+
+        <h1>Create Account</h1>
+        <p>Step 1: Set up your credentials</p>
+
+        <form action="/register-step2" method="post" onsubmit="return validateForm()">
+            
+            <!-- Email Input -->
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+
+            <!-- Password Input -->
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="register_pass" name="password" placeholder="Create Master Password" required onkeyup="checkPasswordRealTime()">
+            </div>
+
+            <!-- REQUIREMENTS CHECKLIST -->
+            <div id="password-requirements">
+                <h4>Security Check:</h4>
+                <div id="rule-len" class="req-item"><i class="fas fa-times-circle"></i> 8+ Characters</div>
+                <div id="rule-upper" class="req-item"><i class="fas fa-times-circle"></i> Uppercase (A-Z)</div>
+                <div id="rule-lower" class="req-item"><i class="fas fa-times-circle"></i> Lowercase (a-z)</div>
+                <div id="rule-num" class="req-item"><i class="fas fa-times-circle"></i> Number (0-9)</div>
+                <div id="rule-sym" class="req-item"><i class="fas fa-times-circle"></i> Symbol (!@#$)</div>
+            </div>
+
+            <button type="submit" class="btn-register">Continue <i class="fas fa-arrow-right"></i></button>
+        </form>
+
+        <div class="footer-link">
+            Already have an account? <a href="/login">Login here</a>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT VALIDATION -->
+    <script>
+        function checkPasswordRealTime() {
+            const password = document.getElementById('register_pass').value;
+            const reqBox = document.getElementById('password-requirements');
+            const inputField = document.getElementById('register_pass');
+
+            // Hide/Show box
+            if (password.length === 0) {
+                reqBox.style.display = 'none';
+                inputField.classList.remove('input-error', 'input-success');
+                return false;
+            }
+            reqBox.style.display = 'block';
+
+            // Rules
+            const hasLen = password.length >= 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNum = /[0-9]/.test(password);
+            const hasSym = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            // Update UI
+            updateRule('rule-len', hasLen);
+            updateRule('rule-upper', hasUpper);
+            updateRule('rule-lower', hasLower);
+            updateRule('rule-num', hasNum);
+            updateRule('rule-sym', hasSym);
+
+            // Check All
+            if (hasLen && hasUpper && hasLower && hasNum && hasSym) {
+                inputField.classList.remove('input-error');
+                inputField.classList.add('input-success');
+                return true;
+            } else {
+                inputField.classList.remove('input-success');
+                inputField.classList.add('input-error');
+                return false;
+            }
+        }
+
+        function updateRule(elementId, isValid) {
+            const el = document.getElementById(elementId);
+            const icon = el.querySelector('i');
+            if (isValid) {
+                el.classList.add('valid');
+                icon.className = 'fas fa-check-circle';
+            } else {
+                el.classList.remove('valid');
+                icon.className = 'fas fa-times-circle';
+            }
+        }
+
+        function validateForm() {
+            return checkPasswordRealTime();
+        }
+    </script>
+
+</body>
+</html>

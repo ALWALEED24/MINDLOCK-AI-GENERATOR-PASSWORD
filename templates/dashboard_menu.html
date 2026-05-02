@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Hub - MindLock AI</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- 1. THEME BACKGROUND --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            padding: 20px;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+        /* --- 2. HEADER --- */
+        .welcome-header { text-align: center; margin-bottom: 40px; margin-top: 40px; }
+        h1 { font-size: 2.5rem; margin-bottom: 5px; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        p.subtitle { font-size: 1.1rem; opacity: 0.8; color: #a5b4fc; }
+
+        /* --- 3. GRID LAYOUT (FIXED SPACING) --- */
+        .dashboard-grid {
+            display: grid;
+            /* Responsive columns */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            
+            /* --- FIX: Increased Gap to prevent overlap --- */
+            gap: 40px; 
+            row-gap: 70px; /* Extra vertical space between rows */
+            
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 80px;
+            padding: 10px; /* Prevents shadow clipping */
+        }
+
+        /* --- 4. GLASS CARDS --- */
+        .card-visual {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: transform 0.3s, background 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .card-visual:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+
+        /* --- 5. ICONS --- */
+        .card-icon-circle {
+            width: 70px; height: 70px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 2rem; 
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        h3 { margin: 0 0 10px 0; font-size: 1.3rem; }
+        p { font-size: 0.9rem; opacity: 0.7; margin-bottom: 25px; flex-grow: 1; color: #cbd5e1; }
+
+        /* --- 6. BUTTONS --- */
+        .btn-primary {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            width: 80%;
+            font-size: 1rem;
+            margin-top: auto; /* Pushes button to bottom of card */
+        }
+
+        .btn-primary:hover { transform: scale(1.05); filter: brightness(1.1); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        /* Color Variants */
+        .btn-green  { background: linear-gradient(90deg, #11998e, #38ef7d); color: white; }
+        .btn-blue   { background: linear-gradient(90deg, #00c6ff, #0072ff); color: white; }
+        .btn-purple { background: linear-gradient(90deg, #8e2de2, #4a00e0); color: white; }
+        .btn-pink   { background: linear-gradient(90deg, #ec008c, #fc6767); color: white; }
+        .btn-orange { background: linear-gradient(90deg, #f12711, #f5af19); color: white; }
+        .btn-teal   { background: linear-gradient(90deg, #00d2ff, #3a7bd5); color: white; }
+
+        /* --- 7. MODAL --- */
+        #feedbackModal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: #1e293b;
+            padding: 30px; border-radius: 20px;
+            width: 90%; max-width: 400px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        textarea { width: 100%; background: #0f172a; border: 1px solid #334155; color: white; padding: 10px; border-radius: 10px; margin: 15px 0; }
+        select { background: #0f172a; color: white; border: none; padding: 10px; border-radius: 5px; font-size: 1.2rem; }
+
+    </style>
+</head>
+<body>
+
+    <!-- LOGOUT BUTTON -->
+    <a href="/" style="
+        position: absolute; top: 20px; left: 20px; 
+        text-decoration: none; color: rgba(255, 255, 255, 0.7); font-weight: 600; 
+        background: rgba(255, 255, 255, 0.1); padding: 10px 20px; 
+        border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.2); 
+        transition: 0.3s; z-index: 1000; display: flex; align-items: center; gap: 8px;
+    " onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.color='white';" 
+       onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.color='rgba(255, 255, 255, 0.7)';">
+        <i class="fas fa-arrow-left"></i> Logout
+    </a>
+
+    <div class="welcome-header">
+        <h1>Welcome, {{ username }}!</h1>
+        <p class="subtitle">MindLock Control Center</p>
+    </div>
+
+    <div class="dashboard-grid">
+        
+        <!-- 1. GENERATE -->
+        <div class="card-visual">
+            <div class="card-icon-circle" style="color: #38ef7d;"><i class="fas fa-magic"></i></div>
+            <h3>Generate</h3>
+            <p>Create new AI-powered passwords.</p>
+            <form action="/generate-from-db" method="post" style="width:100%;">
+                <input type="hidden" name="email" value="{{ email }}">
+                <input type="hidden" name="password" value="{{ password }}">
+                <button type="submit" class="btn-primary btn-green">Go</button>
+            </form>
+        </div>
+
+        <!-- 2. VAULT -->
+        <div class="card-visual">
+            <div class="card-icon-circle" style="color: #00c6ff;"><i class="fas fa-vault"></i></div>
+            <h3>My Vault</h3>
+            <p>View your saved credentials.</p>
+            <form action="/view-vault" method="post" style="width:100%;">
+                <input type="hidden" name="email" value="{{ email }}">
+                <input type="hidden" name="password" value="{{ password }}">
+                <button type="submit" class="btn-primary btn-blue">Open</button>
+            </form>
+        </div>
+
+        <!-- 3. PREFERENCES -->
+        <div class="card-visual">
+            <div class="card-icon-circle" style="color: #a855f7;"><i class="fas fa-sliders-h"></i></div>
+            <h3>Preferences</h3>
+            <p>Adjust AI memory and settings.</p>
+            <form action="/setup-preferences" method="post" style="width:100%;">
+                <input type="hidden" name="email" value="{{ email }}">
+                <input type="hidden" name="password" value="{{ password }}">
+                <button type="submit" class="btn-primary btn-purple">Config</button>
+            </form>
+        </div>
+
+        <!-- 4. PROFILE -->
+        <div class="card-visual">
+            <div class="card-icon-circle" style="color: #fc6767;"><i class="fas fa-user-circle"></i></div>
+            <h3>Profile</h3>
+            <p>Edit user details & master key.</p>
+            <form action="/profile" method="post" style="width:100%;">
+                <input type="hidden" name="email" value="{{ email }}">
+                <input type="hidden" name="password" value="{{ password }}">
+                <button type="submit" class="btn-primary btn-pink">Edit</button>
+            </form>
+        </div>
+
+        <!-- 5. FEEDBACK -->
+        <div class="card-visual">
+            <div class="card-icon-circle" style="color: #f5af19;"><i class="fas fa-star"></i></div>
+            <h3>Feedback</h3>
+            <p>Rate your experience.</p>
+            <button onclick="openFeedback()" class="btn-primary btn-orange">Rate</button>
+        </div>
+
+        <!-- 6. DATABASE -->
+        <div class="card-visual">
+            <div class="card-icon-circle" style="color: #00d2ff;"><i class="fas fa-database"></i></div>
+            <h3>Database</h3>
+            <p>View records (Read Only).</p>
+            <form action="/database-view" method="post" style="width:100%;">
+                <input type="hidden" name="email" value="{{ email }}">
+                <input type="hidden" name="password" value="{{ password }}">
+                <button type="submit" class="btn-primary btn-teal">View</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- FEEDBACK MODAL -->
+    <div id="feedbackModal">
+        <div class="modal-content">
+            <h3 style="color:#a5b4fc;">Rate MindLock</h3>
+            <form action="/submit-feedback" method="post">
+                <select name="rating">
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                </select>
+                <textarea name="comment" placeholder="Tell us what you think..."></textarea>
+                <button type="submit" class="btn-primary btn-green">Submit</button>
+                <button type="button" onclick="closeFeedback()" style="background:none; border:none; color:#999; margin-top:15px; cursor:pointer; width:100%;">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openFeedback() { document.getElementById('feedbackModal').style.display = 'flex'; }
+        function closeFeedback() { document.getElementById('feedbackModal').style.display = 'none'; }
+    </script>
+
+</body>
+</html>

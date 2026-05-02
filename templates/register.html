@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Profile Survey - MindLock</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- 1. ANIMATED BACKGROUND --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- 2. WIDE GLASS CARD --- */
+        .survey-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 1000px; /* Wider for the grid */
+            text-align: center;
+            animation: zoomIn 0.8s ease-out;
+            margin: 40px 0;
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- 3. TYPOGRAPHY --- */
+        h1 { font-size: 2rem; margin-bottom: 5px; font-weight: 600; text-shadow: 0 4px 4px rgba(0,0,0,0.2); }
+        p { font-size: 0.95rem; opacity: 0.8; margin-bottom: 30px; }
+
+        /* --- 4. GRID LAYOUT --- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+            gap: 20px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        /* --- 5. INPUT STYLING --- */
+        .input-wrapper label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .input-wrapper label i {
+            color: #4ca1af; /* Accent color for icons */
+            margin-right: 5px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            box-sizing: border-box;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .input-wrapper input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #4ca1af;
+            box-shadow: 0 0 10px rgba(76, 161, 175, 0.5);
+        }
+
+        /* --- 6. BUTTON --- */
+        .btn-continue {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+        }
+
+        .btn-continue:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(17, 153, 142, 0.6);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="survey-card">
+        <h1>AI Data Collection</h1>
+        <p>Answer these questions to help the AI generate unique passwords for you.</p>
+
+        <form action="/register" method="post">
+            
+            <!-- Hidden Fields (Crucial to keep these) -->
+            <input type="hidden" name="email" value="{{ email }}">
+            <input type="hidden" name="password" value="{{ password }}">
+
+            <div class="form-grid">
+                
+                <!-- Row 1 -->
+                <div class="input-wrapper">
+                    <label><i class="fas fa-user"></i> Username</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="input-wrapper">
+                    <label><i class="fas fa-id-badge"></i> Nickname</label>
+                    <input type="text" name="nickname">
+                </div>
+                <div class="input-wrapper">
+                    <label><i class="fas fa-hashtag"></i> Favourite Number</label>
+                    <input type="text" name="favourite_number">
+                </div>
+
+                <!-- Row 2 -->
+                <div class="input-wrapper">
+                    <label><i class="fas fa-gamepad"></i> Hobby</label>
+                    <input type="text" name="hobby">
+                </div>
+                <div class="input-wrapper">
+                    <label><i class="fas fa-pizza-slice"></i> Favourite Food</label>
+                    <input type="text" name="favourite_food">
+                </div>
+                <div class="input-wrapper">
+                    <label><i class="fas fa-basketball-ball"></i> Favourite Sport</label>
+                    <input type="text" name="favourite_sport">
+                </div>
+
+                <!-- Row 3 -->
+                <div class="input-wrapper">
+                    <label><i class="fas fa-book"></i> Favourite Subject</label>
+                    <input type="text" name="favourite_subject">
+                </div>
+                <div class="input-wrapper">
+                    <label><i class="fas fa-book-open"></i> Favourite Book</label>
+                    <input type="text" name="favourite_book">
+                </div>
+                <div class="input-wrapper">
+                    <label><i class="fas fa-child"></i> Childhood Nickname</label>
+                    <input type="text" name="childhood_nickname">
+                </div>
+
+                <!-- Row 4 -->
+                <div class="input-wrapper">
+                    <label><i class="fas fa-star"></i> Favourite Celebrity</label>
+                    <input type="text" name="favourite_celebrity">
+                </div>
+                <div class="input-wrapper">
+                    <label><i class="fas fa-users"></i> Sibling Position</label>
+                    <input type="text" name="sibling_position">
+                </div>
+                <div class="input-wrapper">
+                    <label><i class="fas fa-trophy"></i> Ambition</label>
+                    <input type="text" name="ambition">
+                </div>
+
+                <!-- Row 5 -->
+                <div class="input-wrapper">
+                    <label><i class="fas fa-map-marker-alt"></i> Favourite Place</label>
+                    <input type="text" name="favourite_place">
+                </div>
+                <div class="input-wrapper">
+                    <label><i class="fas fa-coffee"></i> Favourite Cafe</label>
+                    <input type="text" name="favourite_cafe">
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn-continue">
+                Generate Passwords <i class="fas fa-magic"></i>
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>

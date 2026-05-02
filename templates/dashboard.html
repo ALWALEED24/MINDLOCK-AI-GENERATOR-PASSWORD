@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Vault - MindLock</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- 1. BACKGROUND --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            padding: 40px 20px;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+        /* --- 2. HEADER --- */
+        .header-section { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5rem; margin: 0; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        h2 { font-weight: 300; font-size: 1.1rem; opacity: 0.7; margin-top: 5px; color: #00c6ff; }
+
+        /* --- 3. GRID LAYOUT --- */
+        .password-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 40px;
+        }
+
+        /* --- 4. GLASS CARD --- */
+        .password-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .password-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Empty State */
+        .password-card.empty { opacity: 0.6; border: 1px dashed rgba(255, 255, 255, 0.15); background: rgba(0, 0, 0, 0.1); }
+
+        /* Card Header */
+        .card-header { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .platform-name { font-size: 1.1rem; font-weight: 600; color: #00c6ff; }
+        .username-text { font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); }
+        .password-icon { width: 24px; height: 24px; object-fit: contain; }
+
+        /* Password Row */
+        .password-row {
+            display: flex; align-items: center; background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px; border-radius: 10px; gap: 12px; margin-bottom: 15px;
+        }
+
+        /* Blurred Password Text */
+        .pass-text {
+            font-family: 'Courier New', monospace; font-size: 0.95rem; flex-grow: 1;
+            filter: blur(5px); transition: 0.3s; cursor: pointer; user-select: none;
+        }
+        .pass-text:hover { filter: blur(0); } /* Reveal on hover */
+
+        /* --- 5. BUTTONS --- */
+        .card-actions { display: flex; gap: 10px; }
+
+        .btn-action {
+            flex: 1; padding: 10px; border: none; border-radius: 8px;
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+
+        /* Copy Button */
+        .btn-copy { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-copy:hover { background: rgba(255,255,255,0.2); }
+
+        /* Login Button */
+        .btn-login { 
+            background: linear-gradient(90deg, #00c6ff, #0072ff); color: white; 
+            box-shadow: 0 4px 10px rgba(0, 114, 255, 0.3);
+        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 114, 255, 0.5); }
+
+        /* Back Button */
+        .btn-back-container { width: 100%; max-width: 500px; text-align: center; }
+        .btn-back {
+            display: block; width: 100%; padding: 15px; background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3); color: white; text-align: center;
+            border-radius: 50px; font-weight: 600; transition: 0.3s; cursor: pointer; font-size: 1rem;
+        }
+        .btn-back:hover { background: rgba(255,255,255,0.2); }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <h1>My Vault</h1>
+        <h2>Secure Credentials</h2>
+    </div>
+
+    <div class="password-grid">
+        {% for item in passwords %}
+        
+        <div class="password-card {% if item.is_empty %}empty{% endif %}">
+            
+            <!-- 1. Header (Platform + User + Icon) -->
+            <div class="card-header">
+                <div>
+                    <div class="platform-name">{{ item.platform }}</div>
+                    {% if not item.is_empty %}
+                        <div class="username-text">{{ item.username }}</div>
+                    {% endif %}
+                </div>
+                {% if item.icon_url %}
+                    <img src="{{ item.icon_url }}" class="password-icon" alt="icon">
+                {% else %}
+                    <i class="fas fa-key" style="color: #888;"></i>
+                {% endif %}
+            </div>
+
+            <!-- 2. Password (Blurred) -->
+            <div class="password-row">
+                <i class="fas fa-lock" style="color: #888;"></i>
+                {% if item.is_empty %}
+                    <span style="color: rgba(255,255,255,0.2);">Empty Slot</span>
+                {% else %}
+                    <span class="pass-text" title="Hover to reveal">{{ item.password }}</span>
+                {% endif %}
+            </div>
+
+            <!-- 3. Actions -->
+            {% if not item.is_empty %}
+            <div class="card-actions">
+                <!-- Copy Only -->
+                <button class="btn-action btn-copy" onclick="copyOnly('{{ item.password }}')">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+                
+                <!-- AUTO LOGIN -->
+                <button class="btn-action btn-login" onclick="loginToSite('{{ item.platform }}', '{{ item.password }}')">
+                    <i class="fas fa-external-link-alt"></i> Login
+                </button>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+    </div>
+
+    
+    <form action="/dashboard" method="post" class="btn-back-container" style="width: 100%; max-width: 500px; margin: 20px auto;">
+        
+        
+        <input type="hidden" name="email" value="{{ user_email }}">
+        <input type="hidden" name="password" value="{{ user_password }}">
+        
+        <button type="submit" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </button>
+    </form>
+
+    <script>
+        function copyOnly(password) {
+            navigator.clipboard.writeText(password).then(() => {
+                alert("Password copied to clipboard!");
+            });
+        }
+
+        function loginToSite(platform, password) {
+            if (!platform || !password) return;
+
+            navigator.clipboard.writeText(password).then(() => {
+                let loginUrl = "";
+                const lowerPlatform = platform.toLowerCase();
+
+                if (lowerPlatform.includes("instagram")) loginUrl = "https://www.instagram.com/accounts/login/";
+                else if (lowerPlatform.includes("facebook")) loginUrl = "https://www.facebook.com/login/";
+                else if (lowerPlatform.includes("gmail")) loginUrl = "https://mail.google.com/";
+                else if (lowerPlatform.includes("twitter")) loginUrl = "https://twitter.com/login";
+                else if (lowerPlatform.includes("tiktok")) loginUrl = "https://www.tiktok.com/login";
+                else if (lowerPlatform.includes("snapchat")) loginUrl = "https://accounts.snapchat.com/accounts/login";
+                else if (lowerPlatform.includes("reddit")) loginUrl = "https://www.reddit.com/login/";
+                else if (lowerPlatform.includes("threads")) loginUrl = "https://www.threads.net/login";
+                else if (lowerPlatform.includes("linkedin")) loginUrl = "https://www.linkedin.com/login";
+                 else if (lowerPlatform.includes("youtube")) loginUrl = "https://accounts.google.com/ServiceLogin?service=youtube";
+                
+                else {
+                    alert("Password copied! Please go to the website manually.");
+                    return;
+                }
+
+                window.open(loginUrl, "_blank");
+            }).catch(err => {
+                alert("Failed to copy password.");
+            });
+        }
+    </script>
+
+</body>
+</html>

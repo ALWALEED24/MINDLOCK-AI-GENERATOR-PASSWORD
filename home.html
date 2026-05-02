@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; /* Hide scrollbars */
+        }
+
+        /* The main container that splits the screen */
+        .split-container {
+            display: flex;
+            height: 100%;
+        }
+
+        /* Styles for each half of the screen */
+        .split {
+            flex: 1; /* Each split takes up half the space */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: flex 0.5s ease; /* Smooth transition for hover */
+        }
+
+        .split.left {
+            background-color: #5d5dff;
+            color: white;
+        }
+
+        .split.right {
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* Make the split grow when you hover over it */
+        .split-container:hover .split:hover {
+            flex: 1.2;
+        }
+        
+        /* Styles for the text and buttons */
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .button {
+            text-decoration: none;
+            border: 2px solid;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .split.left .button {
+            color: white;
+            border-color: white;
+        }
+        
+        .split.left .button:hover {
+            background-color: white;
+            color: #5d5dff;
+        }
+
+        .split.right .button {
+            color: #333;
+            border-color: #333;
+        }
+
+        .split.right .button:hover {
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="split-container">
+        <a href="/login" class="split left">
+            <h2>Already a user?</h2>
+            <p>Click here to sign in to your account.</p>
+            <div class="button">Login</div>
+        </a>
+        <a href="/register" class="split right">
+            <h2>New here?</h2>
+            <p>Create a new account to get started.</p>
+            <div class="button">Register</div>
+        </a>
+    </div>
+
+</body>
+</html>

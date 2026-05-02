@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MindLock AI</title>
+    <!-- Import Google Font for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Import Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- 1. BACKGROUND ANIMATION --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- 2. GLASS CARD CONTAINER --- */
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            color: white;
+            animation: floatUp 0.8s ease-out;
+        }
+
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 3. TYPOGRAPHY --- */
+        .login-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .login-header p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+        }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px auto;
+            font-size: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- 4. INPUT FIELDS --- */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            box-sizing: border-box;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-group input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #4ca1af;
+            box-shadow: 0 0 10px rgba(76, 161, 175, 0.5);
+        }
+
+        /* --- 5. FORGOT PASSWORD LINK (NEW STYLE) --- */
+        .forgot-link {
+            text-align: right;
+            margin-top: -10px; /* Pulls it closer to password input */
+            margin-bottom: 20px;
+        }
+        
+        .forgot-link a {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .forgot-link a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* --- 6. BUTTON --- */
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 5px;
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
+        }
+
+        .btn-login:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 114, 255, 0.6);
+        }
+
+        /* --- 7. FOOTER LINKS --- */
+        .footer-link {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-link a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            background-color: rgba(255, 0, 0, 0.2);
+            color: #ffcccc;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        
+        <div class="icon-circle">
+            <i class="fas fa-lock"></i>
+        </div>
+
+        <div class="login-header">
+            <h1>Welcome Back</h1>
+            <p>Enter your credentials to access the vault</p>
+        </div>
+
+        {% if error %}
+        <div class="error">
+            <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/login-check" method="post">
+            
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-key"></i>
+                <input type="password" name="password" placeholder="Master Password" required>
+            </div>
+
+            <!-- THIS IS THE NEW FORGOT PASSWORD LINK -->
+            <div class="forgot-link">
+                <a href="/forgot-password">Forgot Password?</a>
+            </div>
+            <!-- ----------------------------------- -->
+
+            <button type="submit" class="btn-login">Unlock Dashboard</button>
+        </form>
+
+        <div class="footer-link">
+            New to MindLock? <a href="/register">Create Account</a>
+        </div>
+    </div>
+
+</body>
+</html>

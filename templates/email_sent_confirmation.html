@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Inbox - MindLock</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- BACKGROUND --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+        /* --- CARD --- */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 450px;
+            animation: popIn 0.6s ease-out;
+        }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* --- ICON --- */
+        .icon-circle {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex; justify-content: center; align-items: center;
+            margin: 0 auto 20px auto; font-size: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 { margin-bottom: 10px; font-weight: 600; }
+        p { opacity: 0.8; margin-bottom: 30px; line-height: 1.6; }
+        
+        .btn-main {
+            display: inline-block; padding: 12px 30px;
+            /* Green Gradient */
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 30px;
+            color: white; text-decoration: none; transition: 0.3s;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+        }
+        .btn-main:hover { transform: scale(1.05); }
+
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon-circle">
+            <i class="fas fa-paper-plane" style="color: #4ca1af;"></i>
+        </div>
+        <h1>Email Sent</h1>
+        <p>We have sent a reset link to <strong>{{ email }}</strong>.<br>Please check your inbox (and spam folder).</p>
+        
+        <!-- LINK CHANGED HERE: Points to "/" (Main Page) -->
+        <a href="/" class="btn-main">Back to Main Page</a>
+        
+    </div>
+</body>
+</html>

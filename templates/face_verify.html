@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify Humanity - MindLock</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- 1. ANIMATED BACKGROUND --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- 2. GLASS CARD --- */
+        .verify-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            animation: zoomIn 0.8s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- 3. TYPOGRAPHY --- */
+        h1 { font-size: 1.8rem; margin-bottom: 5px; font-weight: 600; }
+        p { font-size: 0.9rem; opacity: 0.8; margin-bottom: 20px; }
+        
+        .icon-header {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #00c6ff;
+            filter: drop-shadow(0 0 10px rgba(0, 198, 255, 0.5));
+        }
+
+        /* --- 4. CAMERA CONTAINER & SCANNER --- */
+        .camera-wrapper {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 198, 255, 0.2);
+            margin-bottom: 25px;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1); /* Mirror effect */
+        }
+
+        /* The Moving Blue Scanner Line */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #00c6ff;
+            box-shadow: 0 0 15px #00c6ff;
+            animation: scan 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            z-index: 10;
+            opacity: 0.8;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* --- 5. BUTTON --- */
+        .btn-verify {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-verify:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(17, 153, 142, 0.6);
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        /* Hidden Canvas */
+        canvas { display: none; }
+
+    </style>
+</head>
+<body>
+
+    <div class="verify-card">
+        
+        <div class="icon-header">
+            <i class="fas fa-robot"></i>
+        </div>
+
+        <h1>Face Verification</h1>
+        <p>Confirm you are human to finalize registration.</p>
+
+        {% if error %}
+            <div class="error-msg">
+                <i class="fas fa-exclamation-triangle"></i> {{ error }}
+            </div>
+        {% endif %}
+
+        <div class="camera-wrapper">
+            <!-- Scan Animation -->
+            <div class="scan-line"></div>
+            <video id="video" autoplay playsinline></video>
+        </div>
+
+        <!-- Hidden Canvas for capture -->
+        <canvas id="canvas"></canvas>
+
+        <!-- MAIN FORM -->
+        <form id="verifyForm" action="/finalize-registration" method="post">
+            
+            <!-- 1. The Captured Image -->
+            <input type="hidden" name="image_data" id="image_data">
+
+            <!-- 2. Pass ALL DATA (Survey Answers + Email + Password + Visual Hint) -->
+            <!-- This loop ensures Preferences are not lost! -->
+            {% for key, value in data.items() %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+
+            <button type="button" class="btn-verify" onclick="captureAndSubmit()">
+                <i class="fas fa-check-circle"></i> Verify & Save
+            </button>
+        </form>
+
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const form = document.getElementById('verifyForm');
+        const imageInput = document.getElementById('image_data');
+        const btn = document.querySelector('.btn-verify');
+
+        // Start Webcam
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+            })
+            .catch(function(err) {
+                console.error("Camera Error:", err);
+                alert("Please allow camera access.");
+            });
+        }
+
+        function captureAndSubmit() {
+            // UI Feedback
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.style.opacity = "0.7";
+            
+            // Capture
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            // Convert
+            const dataURL = canvas.toDataURL('image/jpeg');
+            imageInput.value = dataURL; 
+
+            // Submit
+            form.submit();
+        }
+    </script>
+
+</body>
+</html>

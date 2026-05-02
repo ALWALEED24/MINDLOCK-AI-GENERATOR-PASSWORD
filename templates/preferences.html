@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Preferences - MindLock AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- BACKGROUND --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 40px 0;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+        /* --- GLASS CONTAINER --- */
+        .pref-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 1000px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        h1 { margin-bottom: 5px; font-weight: 600; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        p { margin-bottom: 30px; opacity: 0.8; }
+
+        /* --- GRID SECTIONS --- */
+        .grid-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            grid-column: 1 / -1;
+            font-size: 1.1rem;
+            color: #4ca1af;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 5px;
+            margin-top: 10px;
+        }
+
+        /* --- INPUTS --- */
+        label { display: block; font-size: 0.85rem; margin-bottom: 5px; color: #ccc; }
+        label i { width: 20px; text-align: center; color: #4ca1af; margin-right: 5px; }
+        
+        input {
+            width: 100%; padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; color: white;
+            outline: none; transition: 0.3s;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        input:focus { border-color: #4ca1af; background: rgba(0, 0, 0, 0.5); }
+
+        /* --- BUTTONS --- */
+        .btn-save {
+            width: 100%; max-width: 300px; padding: 15px;
+            background: linear-gradient(90deg, #8e2de2, #4a00e0);
+            border: none; border-radius: 30px;
+            color: white; font-size: 1rem; font-weight: bold;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+        .btn-save:hover { transform: scale(1.05); }
+
+        .btn-back {
+            display: inline-block; margin-top: 20px;
+            color: rgba(255, 255, 255, 0.6); text-decoration: none; font-size: 0.9rem;
+        }
+        .btn-back:hover { color: white; }
+
+        .success-msg { color: #00e676; margin-bottom: 20px; font-weight: bold; }
+
+    </style>
+</head>
+<body>
+
+    <div class="pref-container">
+        <h1><i class="fas fa-brain"></i> AI Memory Configuration</h1>
+        <p>Update your personal data points to refine the AI password generation.</p>
+
+        {% if message %}
+            <div class="success-msg"><i class="fas fa-check-circle"></i> {{ message }}</div>
+        {% endif %}
+
+        <form action="/save-preferences" method="post">
+            <input type="hidden" name="email" value="{{ email }}">
+            <input type="hidden" name="password" value="{{ password }}">
+
+            <div class="grid-section">
+                
+                <div class="section-title"><i class="fas fa-id-card"></i> Personal Details</div>
+                
+                <div><label><i class="fas fa-id-badge"></i> Nickname</label><input type="text" name="nickname" value="{{ prefs.nickname if prefs }}"></div>
+                <div><label><i class="fas fa-hashtag"></i> Favourite Number</label><input type="text" name="favourite_number" value="{{ prefs.favourite_number if prefs }}"></div>
+                <div><label><i class="fas fa-gamepad"></i> Hobby</label><input type="text" name="hobby" value="{{ prefs.hobby if prefs }}"></div>
+                <div><label><i class="fas fa-child"></i> Childhood Nickname</label><input type="text" name="childhood_nickname" value="{{ prefs.childhood_nickname if prefs }}"></div>
+                <div><label><i class="fas fa-users"></i> Sibling Position</label><input type="text" name="sibling_position" value="{{ prefs.sibling_position if prefs }}"></div>
+                <div><label><i class="fas fa-trophy"></i> Ambition</label><input type="text" name="ambition" value="{{ prefs.ambition if prefs }}"></div>
+
+            </div>
+
+            <div class="grid-section">
+                <div class="section-title"><i class="fas fa-heart"></i> Favourites</div>
+                
+                <div><label><i class="fas fa-pizza-slice"></i> Favourite Food</label><input type="text" name="favourite_food" value="{{ prefs.favourite_food if prefs }}"></div>
+                <div><label><i class="fas fa-basketball-ball"></i> Favourite Sport</label><input type="text" name="favourite_sport" value="{{ prefs.favourite_sport if prefs }}"></div>
+                <div><label><i class="fas fa-book"></i> Favourite Subject</label><input type="text" name="favourite_subject" value="{{ prefs.favourite_subject if prefs }}"></div>
+                <div><label><i class="fas fa-book-open"></i> Favourite Book</label><input type="text" name="favourite_book" value="{{ prefs.favourite_book if prefs }}"></div>
+                <div><label><i class="fas fa-star"></i> Favourite Celebrity</label><input type="text" name="favourite_celebrity" value="{{ prefs.favourite_celebrity if prefs }}"></div>
+                <div><label><i class="fas fa-map-marker-alt"></i> Favourite Place</label><input type="text" name="favourite_place" value="{{ prefs.favourite_place if prefs }}"></div>
+                <div><label><i class="fas fa-coffee"></i> Favourite Cafe</label><input type="text" name="favourite_cafe" value="{{ prefs.favourite_cafe if prefs }}"></div>
+            </div>
+
+            <button type="submit" class="btn-save">Save Configuration</button>
+        </form>
+
+        <form action="/dashboard" method="post" id="backForm">
+            <input type="hidden" name="email" value="{{ email }}">
+            <input type="hidden" name="password" value="{{ password }}">
+        </form>
+        <a href="#" onclick="document.getElementById('backForm').submit()" class="btn-back">Back to Dashboard</a>
+
+    </div>
+
+</body>
+</html>

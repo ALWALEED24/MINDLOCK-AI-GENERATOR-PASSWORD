@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindLock AI</title>
+    <style>
+        /* --- 1. GLOBAL STYLES & BACKGROUND --- */
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* The AI Future Gradient (Your requested background) */
+            background: linear-gradient(-45deg, #141E30, #243B55, #4ca1af, #2c3e50);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            margin: 0;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        a { text-decoration: none; color: white; transition: 0.3s; }
+
+        /* --- 2. NAVIGATION BAR (Top) --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between; /* Logo Left, Buttons Right */
+            align-items: center;
+            padding: 20px 50px;
+            position: absolute; /* Stays at the top */
+            width: 90%; /* Account for padding */
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-item {
+            font-weight: 600;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .nav-item:hover { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+        /* The Pill Button for Register in Nav */
+        .btn-nav {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 8px 20px;
+            border-radius: 20px;
+        }
+        .btn-nav:hover {
+            background-color: white;
+            color: #141E30;
+        }
+
+        /* --- 3. HERO SECTION (Middle) --- */
+        .hero {
+            height: 100vh; /* Full screen height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h1 {
+            font-size: 4rem; /* Big Headline */
+            font-weight: 800;
+            margin: 0;
+            background: -webkit-linear-gradient(#fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        p {
+            font-size: 1.25rem;
+            color: #cbd5e0;
+            max-width: 600px;
+            margin: 20px auto 40px auto;
+            line-height: 1.6;
+        }
+
+        /* --- 4. MAIN CTA BUTTON --- */
+        .btn-start {
+            background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 114, 255, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-start:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 114, 255, 0.6);
+            color: white;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .navbar { padding: 20px; width: 100%; box-sizing: border-box;}
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="navbar">
+        <div class="logo">
+            🛡️ MindLock AI
+        </div>
+        <div class="nav-links">
+            <a href="/login" class="nav-item">Log In</a>
+            <a href="/register" class="nav-item btn-nav">Sign Up</a>
+            
+            <!-- ADDED HELP LINK HERE -->
+            <a href="/help" class="nav-item">Help</a>
+        </div>
+    </nav>
+
+    <!-- CENTER HERO SECTION -->
+    <main class="hero">
+        <div class="hero-icon">🔐</div>
+        <h1>Secure Your Digital Life.</h1>
+        <p>
+            Generate unbreakable passwords based on your personality profile. 
+            Powered by AI, secured by face recognition.
+        </p>
+        <a href="/register" class="btn-start">Get Started</a>
+    </main>
+
+</body>
+</html>
